@@ -1,0 +1,43 @@
+```plantuml
+@startuml UAE Banking Platform - Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+title UAE Banking Platform - System Context
+
+Person_Ext(customer, "Banking Customer", "Personal and business banking users")
+System(web_app, "Web Application", "Provides banking services through web interface")
+System(mobile_app, "Mobile Application", "Provides banking services through mobile app")
+
+System_Boundary(banking_system, "UAE Banking Platform") {
+    System(api_gateway, "API Gateway", "Manages API traffic, security, and throttling")
+    System(account_system, "Account Management", "Handles accounts, balances, and transactions")
+    System(payment_system, "Payment Processing", "Manages domestic and international transfers")
+    System(notification_system, "Notification Engine", "Handles all customer communications")
+    System(utility_system, "Utility Payments", "Manages bill payments and utility services")
+}
+
+System_Ext(core_banking, "Core Banking", "Central banking system")
+System_Ext(swift, "SWIFT Network", "International payment network")
+System_Ext(domestic_clearing, "Domestic Clearing", "Local payment clearing system")
+System_Ext(utility_providers, "Utility Providers", "Third-party utility services")
+
+Rel(customer, web_app, "Uses", "HTTPS")
+Rel(customer, mobile_app, "Uses", "HTTPS")
+Rel_R(web_app, api_gateway, "Calls", "HTTPS/JSON")
+Rel_R(mobile_app, api_gateway, "Calls", "HTTPS/JSON")
+
+Rel_D(api_gateway, account_system, "Routes requests", "HTTPS/JSON")
+Rel_D(api_gateway, payment_system, "Routes requests", "HTTPS/JSON")
+Rel_D(api_gateway, notification_system, "Routes requests", "HTTPS/JSON")
+Rel_D(api_gateway, utility_system, "Routes requests", "HTTPS/JSON")
+
+Rel_R(account_system, core_banking, "Syncs", "Real-time API")
+Rel_R(payment_system, swift, "Sends/Receives", "SWIFT Protocol")
+Rel_R(payment_system, domestic_clearing, "Processes", "ISO20022")
+Rel_R(utility_system, utility_providers, "Integrates", "REST API")
+
+Rel(notification_system, customer, "Notifies", "SMS/Email/Push")
+
+@enduml
+```

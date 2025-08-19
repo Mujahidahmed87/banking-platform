@@ -1,0 +1,108 @@
+```plantuml
+@startuml UAE Banking Platform - Infrastructure
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/General/Client.puml
+!include AWSPuml/NetworkingContentDelivery/Route53.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/SecurityIdentityCompliance/WAF.puml
+!include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+!include AWSPuml/Compute/ElasticKubernetesService.puml
+!include AWSPuml/Database/Aurora.puml
+!include AWSPuml/Database/DynamoDB.puml
+!include AWSPuml/Database/ElastiCache.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+
+title UAE Banking Platform - AWS Infrastructure
+
+rectangle "End Users" {
+    Client(webuser, "Web Users", " ")
+    Client(mobileuser, "Mobile Users", " ")
+}
+
+rectangle "Edge Services" {
+    Route53(dns, "Route 53", "DNS and routing")
+    CloudFront(cdn, "CloudFront", "Content delivery")
+    WAF(waf, "WAF", "Web firewall")
+}
+
+rectangle "UAE Region (me-central-1)" {
+    rectangle "VPC" {
+        rectangle "Public Subnet - AZ1" {
+            APIGateway(apigw1, "API Gateway", "API management")
+        }
+        
+        rectangle "Private Subnet - AZ1" {
+            ElasticKubernetesService(eks1, "EKS Node Group 1", "Application services")
+            Aurora(auroraprimary, "Aurora Primary", "Main database")
+        }
+        
+        rectangle "Private Subnet - AZ2" {
+            ElasticKubernetesService(eks2, "EKS Node Group 2", "Application services")
+            Aurora(aurorareplica1, "Aurora Replica 1", "Read replica")
+        }
+        
+        rectangle "Private Subnet - AZ3" {
+            ElasticKubernetesService(eks3, "EKS Node Group 3", "Application services")
+            Aurora(aurorareplica2, "Aurora Replica 2", "Read replica")
+        }
+        
+        rectangle "Shared Services" {
+            DynamoDB(dynamodb, "DynamoDB", "Session store")
+            ElastiCache(redis, "ElastiCache", "Redis cache")
+            SimpleStorageService(s3, "S3", "Document storage")
+        }
+    }
+}
+
+rectangle "DR Region (GCC)" {
+    rectangle "DR VPC" {
+        rectangle "DR Private Subnet - AZ1" {
+            ElasticKubernetesService(deks1, "DR EKS Node Group 1", "Standby services")
+            Aurora(drauroraprimary, "DR Aurora Primary", "Standby database")
+        }
+        
+        rectangle "DR Private Subnet - AZ2" {
+            ElasticKubernetesService(deks2, "DR EKS Node Group 2", "Standby services")
+            Aurora(draurorareplica, "DR Aurora Replica", "Read replica")
+        }
+    }
+}
+
+' Traffic Flow
+webuser --> dns
+mobileuser --> dns
+dns --> cdn
+cdn --> waf
+waf --> apigw1
+
+' Service Communication
+apigw1 --> eks1
+apigw1 --> eks2
+apigw1 --> eks3
+
+' Data Flow
+eks1 --> auroraprimary
+eks2 --> auroraprimary
+eks3 --> auroraprimary
+
+eks1 ..> dynamodb
+eks2 ..> dynamodb
+eks3 ..> dynamodb
+
+eks1 ..> redis
+eks2 ..> redis
+eks3 ..> redis
+
+eks1 ..> s3
+eks2 ..> s3
+eks3 ..> s3
+
+' Replication
+auroraprimary --> aurorareplica1
+auroraprimary --> aurorareplica2
+auroraprimary --> drauroraprimary
+drauroraprimary --> draurorareplica
+
+@enduml
+```

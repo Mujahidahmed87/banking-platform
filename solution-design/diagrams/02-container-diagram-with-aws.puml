@@ -1,0 +1,239 @@
+@startuml UAE_Banking_Platform_Technical_Container_View
+
+' Style settings
+skinparam linetype ortho
+skinparam handwritten false
+skinparam monochrome false
+skinparam shadowing false
+skinparam defaultFontName "Verdana"
+skinparam defaultFontSize 12
+
+' Style settings
+skinparam package {
+    BackgroundColor WhiteSmoke
+    BorderColor #666666
+}
+
+skinparam component {
+    BackgroundColor White
+    BorderColor #333333
+}
+
+skinparam database {
+    BackgroundColor White
+    BorderColor #333333
+}
+
+skinparam queue {
+    BackgroundColor White
+    BorderColor #333333
+}
+
+skinparam arrow {
+    Color #666666
+    FontColor #666666
+}
+
+skinparam note {
+    BackgroundColor WhiteSmoke
+    BorderColor #999999
+}
+
+title UAE Banking Platform - Technical Container Architecture
+!define APP_COLOR #2ECC71
+!define DATA_COLOR #9B59B6
+!define INTEGRATION_COLOR #F1C40F
+
+package "Client Tier" {
+    actor "Users" as users
+    component "Web Application" as web {
+        note right: React 18.x\nTypeScript 5.x\nPWA Support\nOpenAPI SDK
+    }
+    component "Mobile App" as mobile {
+        note right: React Native 0.72\nBiometric Auth\nOffline Support
+    }
+}
+
+package "Edge Layer" {
+    component "CloudFront CDN" as cdn
+    component "WAF" as waf
+    component "API Gateway" as apigw
+}
+
+package "Security" {
+    component "Cognito" as auth
+    component "Secrets Manager" as secrets
+    component "KMS" as kms
+}
+
+package "Application Layer" {
+    component "App Load Balancer" as alb
+    
+    package "EKS Cluster" {
+        component "Account Service" as account {
+            note right: Java 17, Spring Boot 3.x\n8GB RAM, 4 vCPU
+        }
+        component "Payment Service" as payment {
+            note right: Java 17, Spring Boot 3.x\n8GB RAM, 4 vCPU
+        }
+        component "Notification Service" as notification {
+            note right: Node.js 18, NestJS\n4GB RAM, 2 vCPU
+        }
+    }
+}
+
+package "Data Layer" {
+    database "Aurora MySQL" as db
+    database "DynamoDB" as dynamo
+    database "Redis Cache" as redis
+    database "S3 Storage" as s3
+}
+
+package "Integration" {
+    queue "SNS Topics" as sns
+    queue "SQS Queues" as sqs
+}
+
+' Connections
+users --> web
+users --> mobile
+web --> cdn
+mobile --> cdn
+cdn --> waf
+waf --> apigw
+apigw --> auth
+apigw --> alb
+
+alb --> account
+alb --> payment
+alb --> notification
+
+account --> db
+account --> redis
+payment --> dynamo
+payment --> redis
+notification --> s3
+notification --> sns
+
+sns --> sqs
+account ..> secrets
+payment ..> kms
+
+package "Edge Layer" {
+    component "CloudFront CDN" as cdn {
+        note right: Global CDN\nDDoS Protection (10TB)\nEdge Locations: 3
+    }
+    component "WAF" as waf {
+        note right: Rule Sets: OWASP Top 10\nRate Limit: 10K RPS\nGeo-blocking
+    }
+    component "API Gateway" as apigw {
+        note right: REST APIs\nWebSocket\nRequest Throttling
+    }
+}
+
+package "Security Layer" {
+    component "Cognito" as auth {
+        note right: User Pools\nMFA\nOAuth2/OIDC
+    }
+    component "Secrets Manager" as secrets {
+        note right: Credentials\nAPI Keys\nRotation
+    }
+    component "KMS" as kms {
+        note right: Key Management\nEnvelope Encryption
+    }
+}
+
+package "Application Layer" {
+    component "Application LB" as alb {
+        note right: Internal\nHTTPS\nSticky Sessions
+    }
+    
+    package "EKS Cluster" {
+        note right: EKS v1.27\n3 Node Groups\nm5.2xlarge\nAuto-scaling
+        
+        component "Container Registry" as ecr {
+            note right: Private\nImage Scanning
+        }
+        
+        rectangle "Microservices" {
+            rectangle "Account Service" {
+                note right: Java 17
+                note right: Spring Boot 3.x
+                note right: 8GB RAM, 4 vCPU
+                note right: Min 3 replicas
+            }
+            
+            rectangle "Payment Service" {
+                note right: Java 17
+                note right: Spring Boot 3.x
+                note right: 8GB RAM, 4 vCPU
+                note right: Min 3 replicas
+            }
+            
+            rectangle "Notification Service" {
+                note right: Node.js 18 LTS
+                note right: NestJS
+                note right: 4GB RAM, 2 vCPU
+                note right: Min 2 replicas
+            }
+            
+            rectangle "Utility Service" {
+                note right: Java 17
+                note right: Spring Boot 3.x
+                note right: 4GB RAM, 2 vCPU
+                note right: Min 2 replicas
+            }
+        }
+    }
+}
+
+package "Data Layer" {
+    database "Aurora MySQL" as aurora {
+        note right: v8.0\nMulti-AZ\n6 TB Storage\n100K IOPS
+    }
+    database "DynamoDB" as dynamo {
+        note right: On-Demand\nGlobal Tables\nDAX Enabled
+    }
+    database "Redis Cache" as redis {
+        note right: v7.0\nr6g.xlarge\nMulti-AZ\nCluster Mode
+    }
+    database "S3" as s3 {
+        note right: Standard/IA\nVersioning\nReplication
+    }
+}
+
+package "Integration Layer" {
+    queue "SNS Topics" as sns {
+        note right: FIFO Queues\nMessage Filtering
+    }
+    queue "SQS Queues" as sqs {
+        note right: FIFO Queues\nDLQ Support
+    }
+}
+
+package "Monitoring" {
+    component "CloudWatch" as cw {
+        note right: Metrics\nLogs\nAlarms
+    }
+
+' Technical Flow Specifications
+users --> cdn : "HTTPS/WSS\nTLS 1.3"
+cdn --> waf : "L7 Filtering\n10K RPS"
+waf --> apigw : "REST/WebSocket\nCustom Domain"
+apigw --> cognito : "OAuth2/OIDC\nJWT Tokens"
+apigw --> alb : "Internal TLS\nSecurity Groups"
+alb --> eks : "Target Groups\nHealth Checks"
+
+eks --> aurora : "Connection Pool\nRead/Write Split"
+eks --> dynamo : "DAX Caching\nTransactions"
+eks --> redis : "Session Store\nCaching"
+eks --> s3 : "S3 API\nVPC Endpoint"
+
+eks --> sns : "Pub/Sub\nFIFO"
+eks --> sqs : "Queue\nDLQ"
+
+eks ..> secrets : "Secret Rotation\nAPI Access"
+eks ..> kms : "Envelope Encryption"
+eks ..> cw : "Metrics/Logs\nAlarms"
+
+@enduml

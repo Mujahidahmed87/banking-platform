@@ -1,0 +1,44 @@
+Service Type,Component,Specifications,Monthly Cost (USD),Annual Cost (USD),Notes
+Compute,EKS Control Plane,3 clusters (prod/dr/non-prod),900,10800,300 per cluster per month
+Compute,EKS Worker Nodes Prod,30 x m5.2xlarge,7200,86400,Prod cluster
+Compute,EKS Worker Nodes DR,15 x m5.2xlarge,3600,43200,DR cluster
+Compute,EKS Worker Nodes Non-Prod,10 x m5.2xlarge,2400,28800,Dev/UAT environments
+Database,Aurora Primary,r6g.4xlarge,3400,40800,Production cluster
+Database,Aurora DR,r6g.4xlarge,3400,40800,DR cluster
+Database,Aurora Storage,2000 GB,200,2400,Includes backup storage
+Database,DynamoDB,On-demand + 500GB storage,2500,30000,Session management and caching
+Storage,S3 Standard,5000 GB,115,1380,Active data
+Storage,S3-IA,10000 GB,125,1500,Infrequently accessed data
+Storage,S3 Glacier,20000 GB,80,960,Archive data
+Network,Data Transfer,5000 GB/month,450,5400,Inter-region transfer
+Network,CloudFront,10TB distribution,900,10800,Content delivery
+Security,WAF,10M requests/month,800,9600,Web application firewall
+Security,Shield Advanced,Per account,3000,36000,DDoS protection
+Security,ACM,SSL certificates,0,0,Included with AWS
+Security,KMS,Key management,400,4800,Encryption keys
+Monitoring,CloudWatch,Custom metrics + logs,1200,14400,Monitoring and logging
+Support,Business Support,Based on AWS usage,1000,12000,24/7 support
+Total Infrastructure,,,,379840,Base infrastructure
+
+Service,Dev (Monthly),UAT (Monthly),Prod (Monthly),DR (Monthly),Annual Total,Notes
+Compute,2000,3000,7200,3600,189600,All environments
+Database,1000,1500,3400,3400,111600,All environments
+Storage,200,300,500,500,18000,All cluster storage
+Network,100,200,450,450,14400,Data transfer
+Security,500,500,4200,4200,112800,Security services
+Monitoring,300,300,1200,1200,36000,All monitoring
+Support,250,250,1000,1000,30000,Support costs
+Monthly Total,4350,6050,17950,14350,512400,Per environment
+Annual Total,52200,72600,215400,172200,512400,All environments
+
+Component,Build Cost,Buy Cost,Annual Maintenance,3-Year TCO,Notes
+Account Management,800000,150000,200000,1400000,Build recommended
+Payment Processing,600000,300000,150000,1050000,Hybrid approach
+Notification System,200000,50000,50000,350000,Hybrid approach
+Utility Payments,400000,100000,100000,700000,Buy recommended
+
+Scaling Scenario,Base Load,2x Load,3x Load,5x Load,Notes
+EKS (Monthly),7200,14400,21600,36000,Linear scaling
+Lambda (Monthly),2000,3000,4000,6000,Better scaling economics
+Aurora (Monthly),3400,5100,6800,10200,Reserved capacity benefit
+DynamoDB (Monthly),2500,3750,5000,7500,On-demand pricing
