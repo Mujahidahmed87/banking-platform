@@ -1,5 +1,31 @@
 # Technical Architecture Document: UAE Banking Platform
 
+## Important Notes on Estimates
+
+> **Cost Estimates Disclaimer**: 
+> All cost figures mentioned in this document are estimates based on:
+> - AWS official pricing (as of August 2025)
+> - AWS pricing calculator projections
+> - Similar banking platform implementations
+> - Industry standard usage patterns
+> - Published case studies
+>
+> **Time and Effort Estimates Disclaimer**:
+> Implementation timelines and effort estimates are derived from:
+> - Previous banking platform implementations
+> - Industry standard delivery timelines
+> - Technical complexity assessments
+> - Team size and expertise considerations
+> - Published case studies and white papers
+>
+> Actual costs and timelines may vary based on:
+> - Specific requirements and customizations
+> - Regional pricing differences
+> - Resource optimization strategies
+> - Implementation challenges
+> - Regulatory requirements
+> - Team expertise and availability
+
 ## 1. Architecture Overview
 
 The banking platform is designed as a cloud-native, microservices-based architecture deployed on AWS, emphasizing security, scalability, and reliability. The architecture follows a multi-layered approach with clear service boundaries and robust inter-service communication patterns.

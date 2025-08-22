@@ -148,6 +148,21 @@
 
 ## Cost Optimization
 
+> **Note on Cost Optimizations**:
+> The cost optimization strategies and savings estimates mentioned in this section are based on:
+> - AWS Well-Architected Framework guidelines
+> - AWS case studies and references
+> - Industry best practices
+> - Similar banking platform implementations
+>
+> Actual cost savings and optimization results may vary based on:
+> - Workload characteristics
+> - Usage patterns
+> - Regional pricing
+> - Resource utilization
+> - Implementation efficiency
+> - Market conditions
+
 1. **Resource Optimization**
    - Auto-scaling policies
    - Right-sizing recommendations

@@ -40,6 +40,22 @@ This document outlines the high-level solution design for a cloud-native banking
 - Cloud-native architecture with containerized workloads
 
 ## Timeline and Phases
+
+> **Note on Timeline Estimates**:
+> All timeline and phase durations mentioned below are estimates based on:
+> - Previous banking platform implementations
+> - Industry standard delivery timelines
+> - Technical complexity assessments
+> - Team size and expertise considerations
+>
+> Actual timelines may vary based on:
+> - Specific requirements and changes
+> - Resource availability
+> - Technical challenges
+> - Integration complexities
+> - Regulatory approvals
+> - Stakeholder feedback cycles
+
 Phase 1: Retail Banking Focus
 - Web Banking Platform
 - Mobile Banking (iOS/Android)

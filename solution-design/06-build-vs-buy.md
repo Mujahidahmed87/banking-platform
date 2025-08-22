@@ -1,5 +1,23 @@
 # Build vs Buy Analysis
 
+> **Important Note on Estimates**
+> 
+> The cost figures and timelines mentioned in this analysis are estimates based on:
+> - Market research and vendor quotes (as of August 2025)
+> - Industry benchmarks and reports
+> - Similar implementation case studies
+> - Expert consultations
+> - Historical project data
+>
+> Actual costs and timelines may vary based on:
+> - Specific requirements and customizations
+> - Market conditions
+> - Vendor negotiations
+> - Implementation complexity
+> - Team availability and expertise
+> - Regulatory requirements
+> - Integration challenges
+
 ## Component Analysis
 
 ### Core Banking Components
@@ -80,6 +98,8 @@
 
 ## Cost Analysis
 
+Note: Cost numbers are rough estimates, actual numbers might differ.
+
 ### Development Costs
 
 1. **Build Components**
@@ -111,6 +131,8 @@
    ```
 
 ## Time to Market Analysis
+
+Note: Build and Delivery timelines are rough estimates
 
 ### Build Timeline
 

@@ -1,5 +1,19 @@
 # Cost Analysis and Service Comparisons
 
+> **Disclaimer**: All cost estimates provided in this document are based on:
+> - AWS official pricing (as of August 2025)
+> - AWS pricing calculator projections
+> - Real-world case studies from similar banking implementations
+> - Industry benchmarks and reports
+> 
+> Time estimates are derived from:
+> - Previous project experiences in the banking sector
+> - Industry standard implementation timelines
+> - Technical complexity considerations
+> - Case studies of similar implementations
+>
+> Actual costs and timelines may vary based on specific requirements, optimizations, and unforeseen challenges.
+
 ## Core Infrastructure Comparisons
 
 ### Compute Service Options
